@@ -11,12 +11,15 @@ import { GoogleV2 } from './engines/GoogleV2';
 import { GoogleV1 } from './engines/GoogleV1';
 import { April, downloadDependencies } from './engines/April';
 
-export const PROGRAM_FOLDER = process.env.APPDATA + '/live-captions';
+export const PROGRAM_FOLDER = process.platform === 'win32'
+    ? process.env.APPDATA + '/live-captions'
+    : process.env.HOME + '/.config/live-captions';
 
 let server: Server;
 let clients: ws[] = [];
 
 let speechServices: Speech<GoogleV1 | GoogleV2 | April>[] = [];
+let isStarting: boolean = false;
 
 if (!process.argv.includes('--skip-update-check')) {
     update().then(start);
@@ -28,6 +31,12 @@ let volumeInterval: NodeJS.Timeout;
 let updateInterval: NodeJS.Timeout;
 
 async function start() {
+    // Prevent multiple simultaneous start() calls
+    if (isStarting) {
+        console.log('start() already in progress, skipping duplicate call');
+        return;
+    }
+    isStarting = true;
     // Create program folder
     if (!existsSync(PROGRAM_FOLDER)) {
         mkdirSync(PROGRAM_FOLDER);
@@ -105,6 +114,7 @@ async function start() {
     // For development testing simulating semi-realistic captions
     if (process.argv.includes('--gibberish')) {
         require('./util/developmentGibberish').gibberish(clients, 2);
+        isStarting = false;
         return;
     }
 
@@ -125,4 +135,6 @@ async function start() {
         }
         await new Promise((resolve) => setTimeout(resolve, 200));
     }
+
+    isStarting = false;
 };
