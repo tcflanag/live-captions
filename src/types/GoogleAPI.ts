@@ -3,6 +3,7 @@ export interface SpeechResultData {
 }
 
 export interface SpeechResult extends SpeechRecognitionResult {
+    languageCode: any;
     alternatives: SpeechRecognitionAlternative[]
 }
 

@@ -82,6 +82,7 @@ export class Server {
         this.app.post('/restart', (req, res) => {
             res.send();
             restart();
+            this.stop()
         });
 
         this.app.get('/devices', async (req, res) => {

@@ -73,3 +73,6 @@ This will walk through the steps to setup a google cloud account for non FiM use
 <img width="745" height="294" alt="image" src="https://github.com/user-attachments/assets/ad3c30c1-01ae-427b-8a2f-155f8b708a51" />
 
 
+# Non-Fim Addition
+https://console.developers.google.com/apis/api/translate.googleapis.com/overview?project=starry-sylph-478816-g7
+And account permissions

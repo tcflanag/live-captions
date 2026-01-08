@@ -18,6 +18,8 @@ export class ConfigManager {
         port: 3000,
         google: {
             projectId: '',
+            region: 'global',
+            model: 'latest_long',
             scopes: 'https://www.googleapis.com/auth/cloud-platform',
             credentials: {
                 client_email: '',
@@ -32,7 +34,9 @@ export class ConfigManager {
             '+gun',
             '+guns',
             '+pistol',
-            '+pistols'
+            '+pistols',
+            '-bulshit',
+            '-bullshit',
         ],
         streamingTimeout: 60e3,
         inputs: [],

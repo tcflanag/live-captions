@@ -118,5 +118,13 @@
     {
         "regex": "/ LG /gim",
         "replacement": " Algae "
+    },
+    {
+    "regex": "/ortop/gim",
+    "replacement": "ORTOP"
+   },
+    {
+        "regex": "/our top/gim",
+        "replacement": "ORTOP"
     }
 ]

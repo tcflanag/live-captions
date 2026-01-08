@@ -1,6 +1,6 @@
 {
     "name": "live-captions",
-    "version": "1.8.0",
+    "version": "1.9.0",
     "main": "./build/index.js",
     "bin": "./build/index.js",
     "scripts": {
@@ -13,7 +13,9 @@
     "license": "ISC",
     "dependencies": {
         "@google-cloud/speech": "^6.7.1",
+        "@google-cloud/translate": "^9.3.0",
         "@materializecss/materialize": "^2.2.2",
+        "@yao-pkg/pkg": "^6.11.0",
         "audify": "^1.10.1",
         "bad-words": "^3.0.4",
         "body-parser": "^1.20.3",
@@ -31,12 +33,11 @@
         "@types/pumpify": "^1.4.5",
         "bun-types": "latest",
         "lorem-ipsum": "^2.0.8",
-        "pkg": "^5.8.1",
         "typescript": "^5.9.3"
     },
     "pkg": {
         "targets": [
-            "node18-windows-x64"
+            "node24-windows-x64"
         ],
         "assets": [
             "./src/public/**/*",

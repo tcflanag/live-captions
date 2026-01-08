@@ -170,7 +170,7 @@ function handleCaptionFrame(frame) {
 	}
 
 	if (clearing) return; // Don't process frames while clearing
-
+	//frame.text = "· "+frame.text // TODO figure out what new line method is best
 	const device = frame.device;
 
 	// Initilize defaults
@@ -180,7 +180,7 @@ function handleCaptionFrame(frame) {
 			lastFrameWasFinal: false,
 			currentDiv: undefined,
 			currentTimeout: undefined,
-			color: config.transcription.inputs.find((input) => input.id === device).color,
+			color: config.transcription.inputs.find((input) => input.id === Math.trunc(device)).color,
 		};
 
 	let { transcript, lastFrameWasFinal, currentDiv, currentTimeout, color } = deviceStats[device];
@@ -204,10 +204,7 @@ function handleCaptionFrame(frame) {
 	}
 
 	// Check if we've located the correct span
-	if (currentDiv != undefined) {
-		// Just append to that
-		if (!frame.isFinal) currentDiv.innerHTML = transcript + capitalize(frame.text);
-	} else {
+	if (!currentDiv) {
 		// Otherwise create a new span with the correct color
 		currentDiv = document.createElement("div");
 		currentDiv.style.color = color;
@@ -215,15 +212,15 @@ function handleCaptionFrame(frame) {
 		currentDiv.style.lineHeight = config.display.size + 6 + "px";
 		currentDiv.style.maxHeight = parseFloat(config.display.size) * config.display.lines + 6 + "px";
 		lc.appendChild(currentDiv);
-		currentDiv.innerHTML = capitalize(frame.text) + (frame.isFinal ? ".\n" : "");
 	}
+	//currentDiv.innerHTML = transcript +"<span style=\"background-color: #444444;\">"+ capitalize(frame.text) +"</span>"+ "<hr>";
+	currentDiv.innerHTML = transcript + capitalize(frame.text) + "<hr>";
 
 	if (frame.isFinal) {
 		lastFrameWasFinal = true;
 
 		// If the sentence is finished we can commit it to the transcript
-		transcript += capitalize(frame.text) + "\n";
-		currentDiv.innerHTML = transcript;
+		transcript += capitalize(frame.text) + "\n<br>"; //todo <br>
 
 		currentTimeout = setTimeout(() => {
 			deviceStats[device].currentDiv.innerHTML = "";

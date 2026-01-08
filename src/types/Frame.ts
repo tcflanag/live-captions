@@ -9,5 +9,6 @@ export interface Frame extends WebSocketMessage {
     text: string,
     confidence: number,
     speaker?: string,
-    skip?: number
+    skip?: number,
+    languageCode?: string
 }

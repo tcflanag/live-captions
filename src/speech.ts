@@ -9,6 +9,7 @@ import { GoogleV2 } from './engines/GoogleV2';
 import { GoogleV1 } from './engines/GoogleV1';
 import { April } from './engines/April';
 import { transform } from './util/transformer';
+import {Translator} from "./translate";
 
 // Number of frames after silence is detected to continue streaming
 const THRESHOLD_CUTOFF_SMOOTHING = 10;
@@ -24,6 +25,7 @@ export class Speech<T extends GoogleV2 | GoogleV1 | April> {
     public inputConfig: InputConfig;
     private clients: WebSocket[];
     private engine: GoogleV2 | GoogleV1 | April;
+    private translationClient: Translator;
     private rtAudio?: RtAudio;
     private filter = new BadWords({ placeHolder: ' ' });
     private amplitudeArray: number[] = [0, 0, 0, 0, 0];
@@ -62,6 +64,7 @@ export class Speech<T extends GoogleV2 | GoogleV1 | April> {
         this.filter.removeWords(...removeWords);
 
         this.engine = new engine(config, input.sampleRate, input.id, input.speaker ?? "Unknown", input.languages ?? ['en-us'], this.restart);
+        this.translationClient = new Translator(config, this.clients, input, mockMode);
 
         this.engine.emitter.on('frame', (frame: Frame) => {
             frame.text = transform(frame.text, config.transformations);
@@ -74,6 +77,7 @@ export class Speech<T extends GoogleV2 | GoogleV1 | April> {
             for (let ws of this.clients) {
                 ws.send(msg);
             }
+            this.translationClient.translateFrame(frame)
         });
 
         if (!this.mockMode) {

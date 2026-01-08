@@ -14,6 +14,8 @@ export interface ServerConfig {
     port: number;
     google: {
         projectId: string,
+        region: string,
+        model: string,
         scopes: string,
         credentials: {
             client_email: string,
